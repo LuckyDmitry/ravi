@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_code_editor/flutter_code_editor.dart';
+import 'package:flutter_highlight/themes/monokai-sublime.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:ravi/src/common/ui/app_bar_widget.dart';
+import 'package:highlight/languages/kotlin.dart';
 import '../../../common/ui/code_widget.dart';
 import '../domain/lesson_use_case.dart';
 import 'lesson_view_model.dart';
@@ -25,8 +28,7 @@ class SubLesson {
       required this.isCodingTask,
       required this.isEnabled,
       this.isSelected = false,
-      this.isCompleted = false
-      });
+      this.isCompleted = false});
 }
 
 class Lesson {
@@ -75,7 +77,6 @@ class _LessonView extends State<LessonView> {
 
   @override
   Widget build(BuildContext context) {
-
     if (lessons.isEmpty && subLesson == null) {
       // Display loading indicator when data is being loaded
       return
@@ -91,9 +92,11 @@ class _LessonView extends State<LessonView> {
               children: <Widget>[
                 SizedBox(
                   width: 250,
-                  child: MenuSection(lessons: lessons, onSublessonTap: (sublesson) {
-                    widget.viewModel.onSubLessonTap(sublesson);
-                  }),
+                  child: MenuSection(
+                      lessons: lessons,
+                      onSublessonTap: (sublesson) {
+                        widget.viewModel.onSubLessonTap(sublesson);
+                      }),
                 ),
                 Expanded(
                   child: MainContentSection(sublesson: subLesson!),
@@ -118,7 +121,9 @@ class MenuSection extends StatelessWidget {
 
     for (var lesson in lessons) {
       // Add main lesson
-      menuItems.add(ListTile(title: Text(lesson.title, style: TextStyle(color: Color.fromRGBO(238, 238, 238, 1)))));
+      menuItems.add(ListTile(
+          title: Text(lesson.title,
+              style: TextStyle(color: Color.fromRGBO(238, 238, 238, 1)))));
 
       // Add sub-lessons directly under each main lesson
       for (var sublesson in lesson.sublessons) {
@@ -132,48 +137,62 @@ class MenuSection extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(34, 34, 34, 1),
       body: ListView(
-      children: menuItems,
-    ));
+        children: menuItems,
+      ));
   }
 }
 
 class MainContentSection extends StatelessWidget {
-
   SubLesson sublesson;
+
+  final controller = CodeController(
+    text: '...', // Initial code
+    language: kotlin,
+  );
 
   MainContentSection({required this.sublesson});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: EdgeInsets.all(20), child:
-    Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Text(
-            sublesson.title,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 20),
-          MarkdownBody(
-            key: const Key("defaultmarkdownformatter"),
-            data: sublesson.taskDescription,
-            selectable: true,
-            builders: {
-              'code': CodeElementBuilder(),
-            },
-            ),
-          SizedBox(height: 20),
-          const TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Your Answer',
-            ),
-          ),
-        ],
-      )
-      );
+    return SingleChildScrollView(
+        child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Text(
+                  sublesson.title,
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                MarkdownBody(
+                  data: sublesson.taskDescription,
+                  selectable: true,
+                  builders: {
+                    'code': CodeElementBuilder(),
+                  },
+                  styleSheet: MarkdownStyleSheet(
+                    textScaleFactor: 1.0,
+                    codeblockPadding: EdgeInsets.all(10),
+                  ),
+                  styleSheetTheme: MarkdownStyleSheetBaseTheme.material,
+                ),
+                const SizedBox(height: 20),
+                CodeTheme(
+                    data: CodeThemeData(styles: monokaiSublimeTheme),
+                    child: SingleChildScrollView(
+                      child: CodeField(
+                        controller: controller,
+                        minLines: 15,
+                      ),
+                    )),
+                  ElevatedButton(onPressed: () => { 
+
+                  }, child: Text("Send"))
+              ],
+            )));
   }
 }
 
@@ -186,9 +205,9 @@ class SubLessonListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Container container;
-    if (sublesson.isSelected) { 
+    if (sublesson.isSelected) {
       container = Container(width: 4.0, height: 50.0, color: Colors.blue);
-    } else if (sublesson.isCompleted) { 
+    } else if (sublesson.isCompleted) {
       container = Container(width: 4.0, height: 30.0, color: Colors.green);
     } else {
       container = Container(width: 4.0);
@@ -202,11 +221,13 @@ class SubLessonListTile extends StatelessWidget {
             enabled: sublesson.isEnabled,
             selected: sublesson.isSelected,
             style: ListTileStyle.list,
-            selectedColor: Color.fromARGB(81, 118, 74, 1),
+            selectedColor: const Color.fromARGB(81, 118, 74, 1),
             title: Text(
               sublesson.title,
               style: TextStyle(
-                color: sublesson.isEnabled ? Color.fromRGBO(238, 238, 238, 1) : Color.fromRGBO(138, 138, 138, 1),
+                color: sublesson.isEnabled
+                    ? const Color.fromRGBO(238, 238, 238, 1)
+                    : const Color.fromRGBO(138, 138, 138, 1),
               ),
             ),
             onTap: () => onTap(sublesson),

@@ -4,7 +4,6 @@ import 'package:ravi/src/common/ui/app_bar_widget.dart';
 import '../../../service_locator.dart';
 import '../data/course_dto.dart';
 import '../data/course_repository.dart';
-import '../domain/courses_use_case.dart';
 import 'cource_item.dart';
 
 class CoursesPage extends StatefulWidget {
