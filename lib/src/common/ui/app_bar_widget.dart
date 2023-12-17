@@ -52,11 +52,11 @@ class FMAppBarState extends State<FMAppBarWidget> {
   Widget build(BuildContext context) {
     if (widget._hideLogin) {
       return AppBar(
-          title: Text("FirstMobileAcademy"),
+          title: const Text("FirstMobileAcademy"),
       );
     } else {
     return AppBar(
-      title: Text("FirstMobileAcademy"),
+      title: const Text("FirstMobileAcademy"),
       automaticallyImplyLeading: false,
       actions: [
         IconButton(onPressed: () {

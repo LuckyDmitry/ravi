@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
-
 import '../../features/auth/presentation/auth_page.dart';
 import '../../features/courses/presentation/courses_page.dart';
+import '../../features/current_cource/presentation/current_cource_page.dart';
 import '../../features/homepage/presentation/home_page.dart';
-import '../../features/lesson/presentation/lesson_view.dart';
 
 class FMRouters {
   static void navigateToCources(BuildContext context) {
@@ -20,7 +19,7 @@ class FMRouters {
   }
   static void navigateToCource(BuildContext context, String courceId) {
     Navigator.of(context).pushAndRemoveUntil(
-        _fadeRoute("${LessonView.screen}/$courceId", (context, _, __) => LessonView(courceId: courceId)),
+        _fadeRoute("${CurrentCourcePage.screen}/$courceId",  (context, _, __) => CurrentCourcePage(courceId: courceId)),
             (route) => false
     );
   }
@@ -31,9 +30,9 @@ class FMRouters {
     );
   }
 
-  static Route _fadeRoute(String name, Widget Function(BuildContext, Animation<double>, Animation<double>) builder) {
+  static Route _fadeRoute(String name, Widget Function(BuildContext, Animation<double>, Animation<double>) builder, {Object? args}) {
     return PageRouteBuilder(
-      settings: RouteSettings(name: name),
+      settings: RouteSettings(name: name, arguments: args),
       pageBuilder: builder,
       transitionsBuilder: (context, animation, _, child) {
         return FadeTransition(

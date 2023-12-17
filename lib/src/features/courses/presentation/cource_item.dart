@@ -30,14 +30,14 @@ class CourseItem extends StatelessWidget {
         children: <Widget>[
           Row(
             children: [
+              Image.network(iconUrl, width: 100, height: 100),
               Text(
                 title,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
-              ),
-              Image.network(iconUrl)
+              )
             ],
           ),
           const SizedBox(height: 8),

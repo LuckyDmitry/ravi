@@ -16,7 +16,7 @@ class CoursesPage extends StatefulWidget {
 }
 
 class _CoursesView extends State<CoursesPage> {
-  final CourseRepository courseRepository = services<CourseRepository>();
+  final CoursesRepository courseRepository = services<CoursesRepository>();
 
   List<CoursePreviewDTO> _courses = [];
   bool _isLoading = true;

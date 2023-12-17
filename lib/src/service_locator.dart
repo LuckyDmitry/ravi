@@ -8,6 +8,6 @@ Future<void> servicesInit() async {
   await services.reset();
 
   services.registerSingleton(AuthService());
-  services.registerFactory(() => CourseRepository());
+  services.registerFactory(() => CoursesRepository());
   
 }
