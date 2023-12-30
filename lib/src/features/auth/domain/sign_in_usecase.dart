@@ -7,8 +7,7 @@ class SignInUseCase extends ChangeNotifier {
   final AuthService authService = services<AuthService>();
 
   Future<UserDTO> signIn(String email, String password) async {
-     await Future.delayed(const Duration(seconds: 1));
-     authService.login(email);
+     await authService.login(email, password);
      return UserDTO(email: email, password: password);
   }
 }

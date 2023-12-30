@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "985346958242",
+    "project_id": "ravi-f8c6f",
+    "storage_bucket": "ravi-f8c6f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985346958242:android:8acde6a5e78e4048bf88fb",
+        "android_client_info": {
+          "package_name": "com.example.ravi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDikpllcUmEw3RjtBV56XI-dFTFG9kZjG8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
