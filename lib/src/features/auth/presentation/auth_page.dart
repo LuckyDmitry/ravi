@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../common/router/router.dart';
 import '../../../common/ui/app_bar_widget.dart';
@@ -40,7 +41,9 @@ class _AuthPageState extends State<AuthPage> {
                       child: PrimaryTextField(
                           controller: emailController,
                           labelText: "Email",
-                          onChanged: (value) { setState(() {});}),
+                          onChanged: (value) {
+                            setState(() {});
+                          }),
                     ),
 
                     SizedBox(
@@ -48,20 +51,32 @@ class _AuthPageState extends State<AuthPage> {
                       child: PrimaryTextField(
                           controller: passwordController,
                           labelText: "Password",
-                          onChanged: (value) { setState(() {}); }),
+                          onChanged: (value) {
+                            setState(() {});
+                          }),
                     ),
                     SizedBox(
-                      width: 300,
-                      child: ElevatedButton(
-                      onPressed: isButtonEnabled ? () {
-                        signInUseCase.signIn(emailController.text, passwordController.text)
-                            .then((value) => {
-                            /// Здесь навигация должна вести не на хоум, а назад
-                            FMRouters.navigateToHome(context)
-                        });
-                      } : null,
-                      child: const Text('Sign In'),
-                    )),
+                        width: 300,
+                        child: ElevatedButton(
+                          onPressed: isButtonEnabled
+                              ? () async {
+                                  try {
+                                    await signInUseCase.signIn(
+                                        emailController.text,
+                                        passwordController.text);
+                                    FMRouters.navigateToHome(context);
+                                  } on FirebaseAuthException catch (e) {
+                                    if (e.code == 'user-not-found') {
+                                      print('No user found for that email.');
+                                    } else if (e.code == 'wrong-password') {
+                                      print(
+                                          'Wrong password provided for that user.');
+                                    }
+                                  }
+                                }
+                              : null,
+                          child: const Text('Sign In'),
+                        )),
                     // ... Add more widgets as needed
                   ],
                 ),
@@ -80,7 +95,8 @@ class PrimaryTextField extends StatelessWidget {
   final bool obscureText;
   final Function(String) onChanged;
 
-  const PrimaryTextField({super.key,
+  const PrimaryTextField({
+    super.key,
     required this.controller,
     required this.labelText,
     this.obscureText = false,

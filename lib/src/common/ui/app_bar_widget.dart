@@ -69,9 +69,8 @@ class FMAppBarState extends State<FMAppBarWidget> {
         TextButton(child: Text(_changeLoginStateButtonTitle), onPressed: () {
           if (widget._authService.loginState is LOGGED) {
             widget._authService.logout();
-          } else {
-            FMRouters.navigateToAuth(context);
-          }
+          } 
+          FMRouters.navigateToAuth(context);
           setState(() {});
         })
       ],

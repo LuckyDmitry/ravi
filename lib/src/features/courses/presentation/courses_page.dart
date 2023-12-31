@@ -59,7 +59,7 @@ class _CoursesView extends State<CoursesPage> {
                   return Material(
                       child: InkWell(
                           onTap: () {
-                            FMRouters.navigateToCource(context, course.id);
+                            FMRouters.navigateToCource(context, course.courseId);
                           },
                           child: CourseItem(
                             title: course.title,

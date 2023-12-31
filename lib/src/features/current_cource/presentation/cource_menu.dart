@@ -3,42 +3,31 @@ import 'package:flutter/material.dart';
 import '../../courses/data/course_dto.dart';
 
 class MenuSection extends StatelessWidget {
-  final List<CourseBlockSchemeDTO> blocks;
-  final BlockAndPage select;
+  final List<PagePreviewDTO> pages;
+  final String selectedPageId;
   final OnTileTap onTileTap;
 
-  const MenuSection({super.key, required this.blocks, required this.select, required this.onTileTap});
+  const MenuSection(
+      {super.key,
+      required this.pages,
+      required this.selectedPageId,
+      required this.onTileTap});
 
   @override
   Widget build(BuildContext context) {
     List<Widget> menuItems = [];
 
-    for (var block in blocks) {
+    // Add sub-lessons directly under each main lesson
+    for (var page in pages) {
       menuItems.add(CourceSchemeListTile(
         entity: CourceSchemeEntity(
-          title: block.title,
-          type: BLOCK(number: block.number),
-          isCompleted: block.isCompleted,
-          isSelected: select.blockNumber == block.number
-              && select.pageNumber == 0,
+          title: page.title,
+          pageId: page.pageId,
+          isCompleted: false,
+          isSelected: selectedPageId == page.pageId,
         ),
         onTap: onTileTap,
       ));
-
-      // Add sub-lessons directly under each main lesson
-      for (var page in block.pages) {
-        menuItems.add(
-          CourceSchemeListTile(
-              entity: CourceSchemeEntity(
-                  title: page.title,
-                  type: PAGE(blockNumber: block.number, number: page.number),
-                  isCompleted: page.completed,
-                  isSelected: select.blockNumber == block.number
-                      && select.pageNumber == page.number,
-              ),
-              onTap: onTileTap,
-        ));
-      }
     }
 
     return Scaffold(
@@ -51,31 +40,25 @@ class MenuSection extends StatelessWidget {
 
 class CourceSchemeEntity {
   final String title;
-  final CourceSchemeEntityType type;
+  final String pageId;
   final bool isCompleted;
   final bool isSelected;
 
-  const CourceSchemeEntity({required this.title, required this.type, required this.isCompleted, required this.isSelected});
+  const CourceSchemeEntity(
+      {required this.title,
+      required this.pageId,
+      required this.isCompleted,
+      required this.isSelected});
 }
 
-typedef OnTileTap = void Function(BlockAndPage select);
-
-abstract class CourceSchemeEntityType {}
-class BLOCK implements CourceSchemeEntityType {
-  final int number;
-  const BLOCK({required this.number});
-}
-class PAGE implements CourceSchemeEntityType{
-  final int number;
-  final int blockNumber;
-  const PAGE({required this.number, required this.blockNumber});
-}
+typedef OnTileTap = void Function(String select);
 
 class CourceSchemeListTile extends StatelessWidget {
   final CourceSchemeEntity entity;
   final OnTileTap onTap;
 
-  const CourceSchemeListTile({super.key, required this.onTap, required this.entity});
+  const CourceSchemeListTile(
+      {super.key, required this.onTap, required this.entity});
 
   @override
   Widget build(BuildContext context) {
@@ -104,17 +87,7 @@ class CourceSchemeListTile extends StatelessWidget {
                     color: Color.fromRGBO(238, 238, 238, 1),
                   ),
                 ),
-                onTap: () => {
-                  if (entity.type is BLOCK) {
-                    onTap(BlockAndPage(
-                        blockNumber: (entity.type as BLOCK).number,
-                        pageNumber: 0))
-                  } else {
-                    onTap(BlockAndPage(
-                        blockNumber: (entity.type as PAGE).blockNumber,
-                        pageNumber: (entity.type as PAGE).number))
-                  }
-                },
+                onTap: () => {onTap(entity.pageId)},
               ),
             ),
           ],

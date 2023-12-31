@@ -1,20 +1,20 @@
 class CoursePreviewDTO {
-    String id;
+    String courseId;
     String title;
     String description;
     String imgUrl;
 
-    CoursePreviewDTO({required this.id, required this.title, this.description = '', required this.imgUrl});
+    CoursePreviewDTO({required this.courseId, required this.title, this.description = '', required this.imgUrl});
 
     factory CoursePreviewDTO.fromJson(Map<String, dynamic> json) => CoursePreviewDTO(
-        id: json['id'],
+        courseId: json['courseId'],
         title: json['title'],
         description: json['description'],
         imgUrl: json['imgUrl'],
     );
 
     Map<String, dynamic> toJson() => {
-        'id': id,
+        'courseId': courseId,
         'title': title,
         'description': description,
         'imgUrl': imgUrl,
@@ -22,98 +22,60 @@ class CoursePreviewDTO {
 }
 
 class CourseSchemeDTO {
-    String id;
+
+    String courseId;
     String title;
-    BlockAndPage continueAt;
-    List<CourseBlockSchemeDTO> blocks;
-
-    CourseSchemeDTO({required this.id, required this.title, required this.continueAt, required this.blocks});
-
-    factory CourseSchemeDTO.fromJson(Map<String, dynamic> json) => CourseSchemeDTO(
-        id: json['id'],
-        title: json['title'],
-        continueAt: BlockAndPage(blockNumber: json["continueAt_blockNumber"], pageNumber: json["continueAt_pageNumber"]),
-        blocks: List<CourseBlockSchemeDTO>.from(json['blocks'].map((x) => CourseBlockSchemeDTO.fromJson(x))),
-    );
-
-    Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'continueAt_blockNumber': continueAt.blockNumber,
-        'continueAt_pageNumber': continueAt.pageNumber,
-        'blocks': List<dynamic>.from(blocks.map((x) => x.toJson())),
-    };
-}
-
-class BlockAndPage {
-    int blockNumber;
-    int pageNumber;
-    BlockAndPage({required this.blockNumber, required this.pageNumber});
-}
-
-class CourseBlockSchemeDTO {
-    int number;
-    String title;
-    bool isCompleted;
     List<PagePreviewDTO> pages;
 
-    CourseBlockSchemeDTO({required this.number, required this.title, required this.isCompleted, required this.pages});
+    CourseSchemeDTO({required this.courseId, required this.title, required this.pages});
 
-    factory CourseBlockSchemeDTO.fromJson(Map<String, dynamic> json) => CourseBlockSchemeDTO(
-        number: json['number'],
+    factory CourseSchemeDTO.fromJson(Map<String, dynamic> json) => CourseSchemeDTO(
+      courseId: json['courseId'],
         title: json['title'],
-        isCompleted: json['isCompleted'],
         pages: List<PagePreviewDTO>.from(json['pages'].map((x) => PagePreviewDTO.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        'number': number,
+        'courseId': courseId,
         'title': title,
-        'isCompleted': isCompleted,
         'pages': List<dynamic>.from(pages.map((x) => x.toJson())),
     };
 }
 
-class PageDTO {
-    int number;
+class PagePreviewDTO {
+    String pageId;
     String title;
-    String content;
-    bool completed;
 
-    PageDTO({required this.number, required this.title, required this.content, this.completed = false});
+    PagePreviewDTO({required this.pageId, required this.title});
 
-    factory PageDTO.fromJson(Map<String, dynamic> json) => PageDTO(
-        number: json['number'],
+    factory PagePreviewDTO.fromJson(Map<String, dynamic> json) => PagePreviewDTO(
+        pageId: json['pageId'],
         title: json['title'],
-        content: json['content'],
-        completed: json['completed'],
     );
 
     Map<String, dynamic> toJson() => {
-        'number': number,
-        'title': title,
-        'content': content,
-        'completed': completed,
+        'pageId': pageId,
+        'title': title
     };
 }
 
-class PagePreviewDTO {
-    int number;
+class PageDTO {
+    String pageId;
     String title;
-    bool completed;
+    String content;
 
-    PagePreviewDTO({required this.number, required this.title, this.completed = false});
+    PageDTO({required this.pageId, required this.title, required this.content});
 
-    factory PagePreviewDTO.fromJson(Map<String, dynamic> json) => PagePreviewDTO(
-        number: json['number'],
+    factory PageDTO.fromJson(Map<String, dynamic> json) => PageDTO(
+        pageId: json['pageId'],
         title: json['title'],
-        completed: json['completed'],
+        content: json['content']
     );
 
     Map<String, dynamic> toJson() => {
-        'number': number,
+        'pageId': pageId,
         'title': title,
-        'completed': completed,
+        'content': content
     };
 }
 

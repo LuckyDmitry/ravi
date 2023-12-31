@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../common/router/router.dart';
 import '../../../common/ui/app_bar_widget.dart';
-
+import 'package:ravi/src/service_locator.dart';
+import "../../../common/auth/auth_service.dart";
 
 class HomePage extends StatelessWidget {
   static const String screen = "/";
@@ -21,18 +22,21 @@ class HomePage extends StatelessWidget {
               height: 300.0,
               width: 300.0,
             ),
-            const Text(
-                "Welcome!",
-                style: TextStyle(fontSize: 30, color: Colors.white70)
-            ),
+            const Text("Welcome!",
+                style: TextStyle(fontSize: 30, color: Colors.white70)),
             TextButton(
-                child: const Text(
-                    "Catalog",
-                    style: TextStyle(fontSize: 28,)
-                ),
+                child: const Text("Catalog",
+                    style: TextStyle(
+                      fontSize: 28,
+                    )),
                 onPressed: () {
-                  FMRouters.navigateToCources(context);
-            })
+                  final AuthService authService = services<AuthService>();
+                  if (authService.loginState is LOGGED) {
+                    FMRouters.navigateToCources(context);
+                  } else {
+                    FMRouters.navigateToAuth(context);
+                  }
+                })
           ],
         ),
       ),

@@ -10,10 +10,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "FirstMobileApp",
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: const Color.fromRGBO(34, 34, 34, 1)
-      ),
+      themeMode: ThemeMode.light,
       home: HomePage(),
     );
   }
